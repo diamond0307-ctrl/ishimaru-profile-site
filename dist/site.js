@@ -15,20 +15,6 @@ if (menuButton && nav) {
   });
 }
 
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.14 }
-);
-
-document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
-
 const dialog = document.querySelector(".lightbox");
 const dialogImage = dialog?.querySelector("img");
 const dialogClose = dialog?.querySelector(".lightbox-close");
@@ -46,13 +32,4 @@ document.querySelectorAll("[data-lightbox]").forEach((button) => {
 dialogClose?.addEventListener("click", () => dialog.close());
 dialog?.addEventListener("click", (event) => {
   if (event.target === dialog) dialog.close();
-});
-
-const contactForm = document.querySelector("[data-contact-form]");
-const formStatus = document.querySelector(".form-status");
-
-contactForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  formStatus?.classList.add("is-visible");
-  formStatus?.focus();
 });
