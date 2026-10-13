@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ishimaru-atsushi-profile.sekamaru.chatgpt.site/sitemap.xml
