@@ -2,6 +2,22 @@
 
 石丸篤史のビジネス用公式プロフィールサイトの非公開ドラフトです。
 
+## 現行HOME：2026-10-24 コンパクトな人物ポスター構成
+
+最新の本人指示により、HOMEのヘッダーは撤去。従来の長い対話から3シーンへ短縮し、詳細5ページへのリンクは維持。ここでの「3ページくらい」はHOME約3画面という解釈を作業前に提示した。端末サイズや拡大率により高さは可変。
+
+1. 活動4領域と「遊びを仕事にする。」：顔を空け、肩・胸元へ文字を重ねる人物ヒーロー。
+2. 「真剣に遊ぼう」：仕事の姿勢、各活動の詳細リンク、100人のアーティスト展の実績。
+3. 「ありのまま生きることがアートになる」：個人の軸とAIで人間の体験を楽しむ社会へのビジョン、相談案内。
+
+- ヒーロー原本：本人指定の `/Users/sekamaru/Desktop/L.A.B/output/imagegen/mediterranean-ai-person-left-cutout.png`（1171×1343、alphaあり）。無変更で `dist/assets/ishimaru-hero-cutout.png` へコピー。人物の再生成、表情変更、他人の写真の流用なし。添付の先頭3画像は構図参考のみで、広告内容・日付・別人物を取り込んでいない。
+- 切り抜き人物の前後へHTML文字を配置。下端のみCSSマスクで背景へなじませる。作品写真は楕円表示による部分紹介であることを記載し、全体はARTページへ。原本ファイルは無変更。
+- `DREAM / LESS IS MORE / ART FOR BEING` を低濃度の背景文字として使用し、読み上げから除外。Motionのスクロール連動は背景文字とせかまるの同行に限定。主コピーやCTAは常に読める。減速設定・JavaScript無効時は静止表示。
+- 背景集48番・12番、本人指定のせかまる、太めのヒラギノ優先を継続。新しい一般イラストは不要なため追加しない。
+- HOME編集元は `src/Home.jsx`、`dist/poster.css`、共通下地は `dist/atelier.css`。`dist/personality.css` は旧HOME用で現行HOMEからは読み込まない。以下の対話型リニューアル記述は変更履歴。
+- 検証用：`node qa/poster-check.mjs`（ローカル8765）。旧 `qa/check.mjs` と `qa/inline-journey.mjs` は旧HOMEの構造を前提としている。
+- 公開範囲は本人限定を維持。素材の一般公開許諾・問い合わせ送信先に関する既存の確認事項は未解決のまま。
+
 ## Source of truth
 
 - /Users/sekamaru/Desktop/ISHIMARU_PROFILE_ARCHIVE/PROFILE_TIMELINE.md
