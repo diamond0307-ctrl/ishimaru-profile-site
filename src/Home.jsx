@@ -1,74 +1,21 @@
-import React, {useRef, useState, useEffect, useId} from 'react';
-import {motion, MotionConfig, useScroll, useTransform, useReducedMotion, useMotionValue, useMotionValueEvent} from 'motion/react';
+import React, {useId} from 'react';
+import {motion, MotionConfig, useReducedMotion, useScroll} from 'motion/react';
 
 export function Maru({small=false}) {
   const id=useId();
   return <svg className={small?'maru small':'maru'} viewBox="480 740 1450 1420" role="img" aria-label="せかまる"><defs><clipPath id={id}><ellipse cx="1200" cy="1470" rx="700" ry="640"/><ellipse cx="755" cy="930" rx="145" ry="150"/><ellipse cx="1645" cy="925" rx="145" ry="150"/></clipPath></defs><g clipPath={'url(#'+id+')'}><rect x="480" y="740" width="1450" height="1420" fill="white"/><image href="assets/sekamaru-original.png" width="2481" height="3508"/></g></svg>;
 }
 
-function Guide({children,className=''}) {
-  return <div className={'poster-guide '+className}><span className="journey-anchor"><Maru/></span><p>{children}</p></div>;
-}
-
-function Companion() {
-  const route=useRef([]), obstacles=useRef([]);
-  const [ready,setReady]=useState(false);
-  const reduced=useReducedMotion();
-  const {scrollY}=useScroll();
-  const x=useMotionValue(0), y=useMotionValue(0), scale=useMotionValue(1), rotate=useMotionValue(0);
-  const update=(scroll)=>{
-    const points=route.current;
-    if(points.length<2)return;
-    let i=0;while(i<points.length-2&&scroll>points[i+1].at)i++;
-    const a=points[i],b=points[i+1];
-    const t=Math.max(0,Math.min(1,(scroll-a.at)/(b.at-a.at)));
-    const ease=t*t*(3-2*t);
-    let px=a.x+(b.x-a.x)*ease, py=a.y+(b.y-a.y)*ease, size=a.size+(b.size-a.size)*ease;
-    for(const box of obstacles.current) {
-      if(px+size>box.left&&px<box.right&&py+size>box.top&&py<box.bottom) { px=8;size=30;break; }
-    }
-    x.set(px);y.set(py-scroll);scale.set(size/80);rotate.set(Math.sin(t*Math.PI)*(b.x>a.x?10:-10));
-  };
-  useEffect(()=>{
-    if(reduced)return;
-    let alive=true;
-    const rect=(el)=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top+scrollY.get(),bottom:r.bottom+scrollY.get(),width:r.width};};
-    const measure=()=>{
-      if(!alive)return;
-      const mobile=innerWidth<700, points=[];
-      const anchors=[...document.querySelectorAll('.journey-anchor')].map(rect);
-      const add=(px,py,size)=>points.push({x:px,y:py,size,at:Math.max(0,py-innerHeight*.58)});
-      anchors.forEach((r,i)=>{
-        add(r.left,r.top,r.width);
-        if(i<anchors.length-1) { add(8,r.bottom+85,mobile?32:46);add(8,anchors[i+1].top-100,mobile?32:46); }
-      });
-      points.sort((a,b)=>a.at-b.at);
-      for(let i=1;i<points.length;i++)points[i].at=Math.max(points[i].at,points[i-1].at+1);
-      route.current=points;
-      obstacles.current=[...document.querySelectorAll('.poster-main h1 span,.poster-main h2,.poster-main p,.poster-main a,.hero-face-safe')].filter(el=>!el.closest('.poster-guide')).map(rect);
-      document.documentElement.classList.add('poster-travelling');setReady(true);update(window.scrollY);
-    };
-    measure();const observer=new ResizeObserver(measure);observer.observe(document.querySelector('.poster-main'));
-    window.addEventListener('resize',measure);document.fonts.ready.then(measure);
-    return()=>{alive=false;observer.disconnect();window.removeEventListener('resize',measure);document.documentElement.classList.remove('poster-travelling');};
-  },[reduced]);
-  useMotionValueEvent(scrollY,'change',update);
-  return !reduced&&ready?<motion.div className="poster-companion" aria-hidden="true" style={{x,y,scale,rotate}}><Maru/></motion.div>:null;
-}
-
-function Watermark({children,className=''}) {
-  const ref=useRef(null),reduced=useReducedMotion();
-  const {scrollYProgress}=useScroll({target:ref,offset:['start end','end start']});
-  const x=useTransform(scrollYProgress,[0,1],['4%','-6%']);
-  return <div ref={ref} className={'poster-watermark '+className} aria-hidden="true"><motion.span style={{x:reduced?0:x}}>{children}</motion.span></div>;
-}
-
-const services=[
-  {name:'アート',detail:'「世界のまる」として、色と形で表現。',href:'art.html'},
-  {name:'デザイン',detail:'ロゴ・Web・LPで、想いをかたちに。',href:'creative.html'},
-  {name:'イベント企画',detail:'「100人のアーティスト展」を主催。',href:'projects.html'},
-  {name:'AI講座',detail:'AIを使い、人間の時間を広げる。',href:'creative.html#ai-lecture'}
+const practices=[
+  {number:'01',en:'HAIR & MAKEUP',name:'ヘアメイク',description:'一人ひとりが持つ魅力を見つけ、引き出す。表現の原点になった仕事。',href:'about.html',image:null},
+  {number:'02',en:'DESIGN',name:'デザイン',description:'ロゴ、アパレル、Web。伝えたい価値を、届くかたちにする。',href:'creative.html',image:'assets/creative-hakataori.jpg',alt:'博多織とのコラボレーションに関連する売場'},
+  {number:'03',en:'ART',name:'アート',description:'「世界のまる」として、感じたことを色と形で表現する。',href:'art.html',image:'assets/art-earth.jpg',alt:'世界のまるによる地球と宇宙を描いた作品の一部'},
+  {number:'04',en:'EVENT',name:'イベント',description:'表現する人が集まり、参加できる場を企画し、つくる。',href:'projects.html',image:'assets/exhibition-hall.jpg',alt:'100人のアーティスト展の会場'}
 ];
+
+function Arrow({children,href,className=''}) {
+  return <a className={'lp-arrow-link '+className} href={href}><span>{children}</span><span aria-hidden="true">↗</span></a>;
+}
 
 export function Home() {
   const reduced=useReducedMotion();
@@ -76,31 +23,43 @@ export function Home() {
   return <MotionConfig reducedMotion="user">
     <a className="skip-link" href="#main">本文へ移動</a>
     <motion.div className="reading-progress" style={{scaleX:scrollYProgress}} aria-hidden="true"/>
-    <Companion/>
-    <main id="main" className="poster-main">
-      <section className="poster-scene poster-hero" aria-labelledby="hero-title">
-        <Watermark className="dream-word">DREAM</Watermark>
-        <ul className="hero-disciplines" aria-label="石丸篤史の活動領域">{services.map(s=><li key={s.name}><a href={s.href}>{s.name}</a></li>)}</ul>
-        <div className="hero-portrait"><img src="assets/ishimaru-hero-cutout.png" alt="石丸篤史" width="1171" height="1343" fetchPriority="high"/><span className="hero-face-safe" aria-hidden="true"/></div>
-        <h1 id="hero-title"><span className="hero-title-back">遊びを</span><span className="hero-title-front">仕事にする。</span></h1>
-        <p className="hero-invitation">真剣に遊ぼう。</p>
-        <div className="hero-identity"><p><strong>石丸篤史</strong><span>Art for Being 代表 / 世界のまる</span></p><a href="about.html" className="poster-link">人物と歩み <span aria-hidden="true">↗</span></a></div>
-        <Guide className="hero-guide">どんなことを、つくってる？ <a href="#work" aria-label="仕事と活動を見る">↓</a></Guide>
+    <main id="main" className="lp">
+      <section className="lp-hero" aria-labelledby="lp-title">
+        <div className="lp-hero-rule" aria-hidden="true"/>
+        <header className="lp-header">
+          <a href="index.html" className="lp-brand" aria-label="石丸篤史 トップページ"><span>ATSUSHI ISHIMARU</span><small>Art for Being</small></a>
+          <nav aria-label="ページ内の案内"><a href="#philosophy">考え方</a><a href="#practice">活動</a><a href="#ai">AI</a><a href="about.html">プロフィール ↗</a></nav>
+        </header>
+        <div className="lp-hero-copy">
+          <p className="lp-hero-kicker">THIS IS MY WAY OF LIFE.</p>
+          <h1 id="lp-title" className="lp-hero-title" aria-label="真剣と書いて、あそびと読む">
+            <span className="lp-hero-kanji" aria-hidden="true">真<br/>剣</span>
+            <span className="lp-hero-reading" aria-hidden="true">あ<br/>そ<br/>び</span>
+          </h1>
+        </div>
+        <div className="lp-hero-portrait"><img src="assets/ishimaru-hero-cutout.png" alt="石丸篤史" width="1171" height="1343" fetchPriority="high"/></div>
+        <div className="lp-hero-bottom"><div><p className="lp-hero-line">それが、僕の仕事です。</p><p className="lp-hero-name">石丸篤史 <span>／ 世界のまる</span></p></div><a href="#philosophy" className="lp-scroll">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
       </section>
 
-      <section id="work" className="poster-scene poster-work" aria-labelledby="work-title">
-        <Watermark className="less-word">LESS IS MORE</Watermark>
-        <div className="work-statement"><Guide>「遊び」を、仕事に？</Guide><h2 id="work-title">真剣に、<br/><em>遊ぼう。</em></h2><p className="work-copy">好きなことを、表現する。<br/>人が集まり、体験する場をつくる。<br/>そのために、いろんな方法を使います。</p></div>
-        <div className="service-index" aria-label="活動の詳細">{services.map((s,i)=><motion.a key={s.name} href={s.href} className="service-entry" whileHover={reduced?undefined:{x:8}} transition={{type:'spring',stiffness:360,damping:32}}><span className="service-number">0{i+1}</span><span><strong>{s.name}</strong><small>{s.detail}</small></span><span className="service-arrow" aria-hidden="true">↗</span></motion.a>)}</div>
-        <a className="project-footnote" href="projects.html"><strong>441</strong><span>人の表現が出会う場。<br/><small>100人のアーティスト展<br/>全4回 / 累計出展者</small></span><span aria-hidden="true">↗</span></a>
+      <section className="lp-philosophy lp-section" id="philosophy" aria-labelledby="philosophy-title">
+        <div className="lp-section-head"><span>01 / THE IDEA</span><span>ART FOR BEING</span></div>
+        <div className="lp-philosophy-layout">
+          <div className="lp-philosophy-copy"><p className="lp-overline">表現する自由。</p><h2 id="philosophy-title">いまの自分を、<br/><em>出していい。</em></h2><p className="lp-body">人目を気にせず、現在の自分を表すこと。<br/>表現の仕方に、決まった正解はありません。<br/>僕は、自分にできる方法で、それを続けてきました。</p><span className="lp-side-note">BE WHO YOU ARE.<br/>MAKE WHAT YOU FEEL.</span></div>
+          <figure className="lp-philosophy-image"><img src="assets/artist-making.jpg" alt="石丸篤史が作品を制作している様子" width="1350" height="1800" loading="lazy"/><figcaption>表現することから、場をつくることへ。</figcaption></figure>
+        </div>
       </section>
 
-      <section id="who" className="poster-scene poster-being" aria-labelledby="being-title">
-        <Watermark className="being-word">ART FOR BEING</Watermark>
-        <a className="art-orbit" href="art.html" aria-label="世界のまるの作品を見る"><img src="assets/art-earth.jpg" alt="地球と宇宙を描いた世界のまるの作品の一部" width="2400" height="1699" loading="lazy"/><span>作品の一部 ↗</span></a>
-        <div className="being-copy"><Guide>その根っこに、あるものは？</Guide><h2 id="being-title">ありのまま<br/>生きることが<br/><em>アートになる。</em></h2><p>AIにできることは、AIへ。<br/>人間は、人間にしかできないことを<br/><strong>楽しんで生きる。</strong><br/>そんな社会を、目指しています。</p><a href="contact.html" className="poster-contact">一緒に、何して遊ぼう？ <span aria-hidden="true">↗</span><small>企画・制作・講座・協賛のご相談</small></a></div>
-        <footer className="poster-footer"><a href="about.html">石丸篤史について ↗</a><span>Art for Being</span><a href="#main">最初へ ↑</a></footer>
+      <section className="lp-practice lp-section" id="practice" aria-labelledby="practice-title">
+        <div className="lp-section-head"><span>02 / WHAT I DO</span><span>FOUR WAYS TO EXPRESS</span></div>
+        <div className="lp-practice-intro"><h2 id="practice-title">手段は、<br/>ひとつじゃない。</h2><p>ヘアメイクから始まり、デザイン、アート、イベントへ。<br/>表現する対象や方法を変えながら、活動を広げてきました。</p></div>
+        <div className="lp-practice-grid">{practices.map((item,i)=><motion.a key={item.number} href={item.href} className={'lp-practice-card lp-practice-card-'+i} whileHover={reduced?undefined:{y:-5}} transition={{duration:.22}}><div className="lp-practice-card-top"><span>{item.number} / {item.en}</span><span aria-hidden="true">↗</span></div>{item.image?<div className="lp-practice-media"><img src={item.image} alt={item.alt} loading="lazy"/></div>:<div className="lp-practice-type" aria-hidden="true">人の<br/>魅力を。</div>}<div className="lp-practice-card-bottom"><h3>{item.name}</h3><p>{item.description}</p></div></motion.a>)}</div>
       </section>
+
+      <section className="lp-event" aria-labelledby="event-title"><div className="lp-event-photo"><img src="assets/portrait-exhibition.jpg" alt="作品が並ぶ100人のアーティスト展の会場にいる石丸篤史" loading="lazy"/></div><div className="lp-event-panel"><span className="lp-event-label">03 / MAKE A PLACE</span><h2 id="event-title">自分が表現する。<br/>その先に、<br/>人が表現できる場を。</h2><p>「100人のアーティスト展」を主催。出展する人たちも運営に参加し、一緒に場をつくっています。</p><div className="lp-event-facts"><div><strong>4</strong><span>開催回数</span></div><div><strong>441</strong><span>累計出展者数</span></div><div><strong>1,530</strong><span>累計来場者数</span></div></div><Arrow href="projects.html">100人のアーティスト展を見る</Arrow><small>2024年8月〜2026年8月の累計</small></div></section>
+
+      <section className="lp-ai lp-section" id="ai" aria-labelledby="ai-title"><div className="lp-section-head"><span>04 / WHAT'S NEXT</span><span>AI & HUMAN TIME</span></div><div className="lp-ai-layout"><div className="lp-ai-symbol" aria-hidden="true">AI<span>×</span>HUMAN</div><div className="lp-ai-copy"><p className="lp-overline">これからの手段。</p><h2 id="ai-title">仕事を、<br/>もっと身軽に。</h2><p>AIを使った仕事の効率化も応援しています。<br/>人が、自分の時間をもっと自分らしく使えるように。</p><Arrow href="creative.html#ai-lecture">AIの活動について見る</Arrow></div></div></section>
+
+      <section className="lp-ending" aria-labelledby="ending-title"><p className="lp-ending-label">ART FOR BEING</p><h2 id="ending-title">生きることを、<br/>表現しよう。</h2><p>企画も、作品も、まだ名前のないアイデアも。<br/>一緒に、かたちにしていきたい。</p><div className="lp-ending-links"><Arrow href="about.html">石丸篤史について</Arrow><Arrow href="contact.html">企画・制作の相談について</Arrow></div><footer><span>© ATSUSHI ISHIMARU</span><a href="#main">BACK TO TOP ↑</a></footer></section>
     </main>
   </MotionConfig>;
 }
