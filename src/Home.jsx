@@ -1,65 +1,31 @@
-import React, {useId} from 'react';
-import {motion, MotionConfig, useReducedMotion, useScroll} from 'motion/react';
+import React,{useId} from 'react';
+import {motion,MotionConfig,useReducedMotion,useScroll} from 'motion/react';
+import workSvg from './work-poster.svg';
 
 export function Maru({small=false}) {
-  const id=useId();
-  return <svg className={small?'maru small':'maru'} viewBox="480 740 1450 1420" role="img" aria-label="せかまる"><defs><clipPath id={id}><ellipse cx="1200" cy="1470" rx="700" ry="640"/><ellipse cx="755" cy="930" rx="145" ry="150"/><ellipse cx="1645" cy="925" rx="145" ry="150"/></clipPath></defs><g clipPath={'url(#'+id+')'}><rect x="480" y="740" width="1450" height="1420" fill="white"/><image href="assets/sekamaru-original.png" width="2481" height="3508"/></g></svg>;
+ const id=useId();
+ return <svg className={small?'maru small':'maru'} viewBox="480 740 1450 1420" role="img" aria-label="せかまる"><defs><clipPath id={id}><ellipse cx="1200" cy="1470" rx="700" ry="640"/><ellipse cx="755" cy="930" rx="145" ry="150"/><ellipse cx="1645" cy="925" rx="145" ry="150"/></clipPath></defs><g clipPath={'url(#'+id+')'}><rect x="480" y="740" width="1450" height="1420" fill="white"/><image href="assets/sekamaru-original.png" width="2481" height="3508"/></g></svg>;
 }
-
 const practices=[
-  {number:'01',en:'HAIR & MAKEUP',name:'ヘアメイク',description:'一人ひとりが持つ魅力を見つけ、引き出す。表現の原点になった仕事。',href:'about.html',image:null},
-  {number:'02',en:'DESIGN',name:'デザイン',description:'ロゴ、アパレル、Web。伝えたい価値を、届くかたちにする。',href:'creative.html',image:'assets/creative-hakataori.jpg',alt:'博多織とのコラボレーションに関連する売場'},
-  {number:'03',en:'ART',name:'アート',description:'「世界のまる」として、感じたことを色と形で表現する。',href:'art.html',image:'assets/art-earth.jpg',alt:'世界のまるによる地球と宇宙を描いた作品の一部'},
-  {number:'04',en:'EVENT',name:'イベント',description:'表現する人が集まり、参加できる場を企画し、つくる。',href:'projects.html',image:'assets/exhibition-hall.jpg',alt:'100人のアーティスト展の会場'}
+ {number:'01',en:'HAIR & MAKEUP',name:'ヘアメイク',description:'一人ひとりが持つ魅力を見つけ、引き出す。表現の原点になった仕事。',href:'about.html',image:'assets/portrait-main.jpg',alt:'石丸篤史のポートレート'},
+ {number:'02',en:'DESIGN',name:'デザイン',description:'ロゴ、アパレル、Web。伝えたい価値を、届くかたちにする。',href:'creative.html',image:'assets/creative-hakataori.jpg',alt:'博多織とのコラボレーションに関連する売場'},
+ {number:'03',en:'ART',name:'アート',description:'「世界のまる」として、感じたことを色と形で表現する。',href:'art.html',image:'assets/art-earth.jpg',alt:'世界のまるによる地球と宇宙を描いた作品の一部'},
+ {number:'04',en:'EVENT',name:'イベント',description:'表現する人が集まり、参加できる場を企画し、つくる。',href:'projects.html',image:'assets/exhibition-hall.jpg',alt:'100人のアーティスト展の会場'}
 ];
-
-function Arrow({children,href,className=''}) {
-  return <a className={'lp-arrow-link '+className} href={href}><span>{children}</span><span aria-hidden="true">↗</span></a>;
+function TypeFill({word,words,color='#1965e8',stripe='#f46f5c',className=''}) {
+ const id=useId(),fontSize=word.length===1?375:word.length===2?345:275;
+ return <svg className={'play-typefill '+className} viewBox="0 0 1200 420" role="img" aria-label={word}><defs><clipPath id={id}><text x="20" y="340" fontSize={fontSize} fontWeight="900" fontFamily="Hiragino Sans, Yu Gothic, sans-serif" letterSpacing="-.09em">{word}</text></clipPath></defs><g clipPath={'url(#'+id+')'}><rect width="1200" height="420" fill={color}/><path d="M0 150H1200V230H0Z" fill={stripe}/><path d="M0 305H1200V385H0Z" fill="#35a784"/>{Array.from({length:10},(_,i)=><text key={i} x={-35-(i%3)*55} y={32+i*42} fontFamily="Hiragino Sans, Yu Gothic, sans-serif" fontSize="29" fontWeight="800" fill="#fff">{(words+'　').repeat(6)}</text>)}</g></svg>;
 }
-
-export function Home() {
-  const reduced=useReducedMotion();
-  const {scrollYProgress}=useScroll();
-  return <MotionConfig reducedMotion="user">
-    <a className="skip-link" href="#main">本文へ移動</a>
-    <motion.div className="reading-progress" style={{scaleX:scrollYProgress}} aria-hidden="true"/>
-    <main id="main" className="lp">
-      <section className="lp-hero" aria-labelledby="lp-title">
-        <div className="lp-hero-rule" aria-hidden="true"/>
-        <header className="lp-header">
-          <a href="index.html" className="lp-brand" aria-label="石丸篤史 トップページ"><span>ATSUSHI ISHIMARU</span><small>Art for Being</small></a>
-          <nav aria-label="ページ内の案内"><a href="#philosophy">考え方</a><a href="#practice">活動</a><a href="#ai">AI</a><a href="about.html">プロフィール ↗</a></nav>
-        </header>
-        <div className="lp-hero-copy">
-          <p className="lp-hero-kicker">THIS IS MY WAY OF LIFE.</p>
-          <h1 id="lp-title" className="lp-hero-title" aria-label="真剣と書いて、あそびと読む">
-            <span className="lp-hero-kanji" aria-hidden="true">真<br/>剣</span>
-            <span className="lp-hero-reading" aria-hidden="true">あ<br/>そ<br/>び</span>
-          </h1>
-        </div>
-        <div className="lp-hero-portrait"><img src="assets/ishimaru-hero-cutout.png" alt="石丸篤史" width="1171" height="1343" fetchPriority="high"/></div>
-        <div className="lp-hero-bottom"><div><p className="lp-hero-line">それが、僕の仕事です。</p><p className="lp-hero-name">石丸篤史 <span>／ 世界のまる</span></p></div><a href="#philosophy" className="lp-scroll">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
-      </section>
-
-      <section className="lp-philosophy lp-section" id="philosophy" aria-labelledby="philosophy-title">
-        <div className="lp-section-head"><span>01 / THE IDEA</span><span>ART FOR BEING</span></div>
-        <div className="lp-philosophy-layout">
-          <div className="lp-philosophy-copy"><p className="lp-overline">表現する自由。</p><h2 id="philosophy-title">いまの自分を、<br/><em>出していい。</em></h2><p className="lp-body">人目を気にせず、現在の自分を表すこと。<br/>表現の仕方に、決まった正解はありません。<br/>僕は、自分にできる方法で、それを続けてきました。</p><span className="lp-side-note">BE WHO YOU ARE.<br/>MAKE WHAT YOU FEEL.</span></div>
-          <figure className="lp-philosophy-image"><img src="assets/artist-making.jpg" alt="石丸篤史が作品を制作している様子" width="1350" height="1800" loading="lazy"/><figcaption>表現することから、場をつくることへ。</figcaption></figure>
-        </div>
-      </section>
-
-      <section className="lp-practice lp-section" id="practice" aria-labelledby="practice-title">
-        <div className="lp-section-head"><span>02 / WHAT I DO</span><span>FOUR WAYS TO EXPRESS</span></div>
-        <div className="lp-practice-intro"><h2 id="practice-title">手段は、<br/>ひとつじゃない。</h2><p>ヘアメイクから始まり、デザイン、アート、イベントへ。<br/>表現する対象や方法を変えながら、活動を広げてきました。</p></div>
-        <div className="lp-practice-grid">{practices.map((item,i)=><motion.a key={item.number} href={item.href} className={'lp-practice-card lp-practice-card-'+i} whileHover={reduced?undefined:{y:-5}} transition={{duration:.22}}><div className="lp-practice-card-top"><span>{item.number} / {item.en}</span><span aria-hidden="true">↗</span></div>{item.image?<div className="lp-practice-media"><img src={item.image} alt={item.alt} loading="lazy"/></div>:<div className="lp-practice-type" aria-hidden="true">人の<br/>魅力を。</div>}<div className="lp-practice-card-bottom"><h3>{item.name}</h3><p>{item.description}</p></div></motion.a>)}</div>
-      </section>
-
-      <section className="lp-event" aria-labelledby="event-title"><div className="lp-event-photo"><img src="assets/portrait-exhibition.jpg" alt="作品が並ぶ100人のアーティスト展の会場にいる石丸篤史" loading="lazy"/></div><div className="lp-event-panel"><span className="lp-event-label">03 / MAKE A PLACE</span><h2 id="event-title">自分が表現する。<br/>その先に、<br/>人が表現できる場を。</h2><p>「100人のアーティスト展」を主催。出展する人たちも運営に参加し、一緒に場をつくっています。</p><div className="lp-event-facts"><div><strong>4</strong><span>開催回数</span></div><div><strong>441</strong><span>累計出展者数</span></div><div><strong>1,530</strong><span>累計来場者数</span></div></div><Arrow href="projects.html">100人のアーティスト展を見る</Arrow><small>2024年8月〜2026年8月の累計</small></div></section>
-
-      <section className="lp-ai lp-section" id="ai" aria-labelledby="ai-title"><div className="lp-section-head"><span>04 / WHAT'S NEXT</span><span>AI & HUMAN TIME</span></div><div className="lp-ai-layout"><div className="lp-ai-symbol" aria-hidden="true">AI<span>×</span>HUMAN</div><div className="lp-ai-copy"><p className="lp-overline">これからの手段。</p><h2 id="ai-title">仕事を、<br/>もっと身軽に。</h2><p>AIを使った仕事の効率化も応援しています。<br/>人が、自分の時間をもっと自分らしく使えるように。</p><Arrow href="creative.html#ai-lecture">AIの活動について見る</Arrow></div></div></section>
-
-      <section className="lp-ending" aria-labelledby="ending-title"><p className="lp-ending-label">ART FOR BEING</p><h2 id="ending-title">生きることを、<br/>表現しよう。</h2><p>企画も、作品も、まだ名前のないアイデアも。<br/>一緒に、かたちにしていきたい。</p><div className="lp-ending-links"><Arrow href="about.html">石丸篤史について</Arrow><Arrow href="contact.html">企画・制作の相談について</Arrow></div><footer><span>© ATSUSHI ISHIMARU</span><a href="#main">BACK TO TOP ↑</a></footer></section>
-    </main>
-  </MotionConfig>;
+function Arrow({children,href}){return <a className="play-link" href={href}><span>{children}</span><span aria-hidden="true">↗</span></a>}
+function SectionHead({n,en}){return <div className="play-section-head"><span>{n}</span><span>{en}</span></div>}
+export function Home(){
+ const reduced=useReducedMotion(),{scrollYProgress}=useScroll();
+ return <MotionConfig reducedMotion="user"><a className="skip-link" href="#main">本文へ移動</a><motion.div className="reading-progress" style={{scaleX:scrollYProgress}} aria-hidden="true"/><main id="main" className="play-lp">
+  <section className="play-hero" aria-labelledby="play-title"><header className="play-header"><a className="play-brand" href="index.html" aria-label="石丸篤史 トップページ">ATSUSHI ISHIMARU<span>ART FOR BEING</span></a><nav aria-label="ページ内の案内"><a href="#idea">考え方</a><a href="#work">活動</a><a href="#ai">AI</a><a href="about.html">プロフィール ↗</a></nav></header><h1 className="sr-only" id="play-title">石丸篤史。真剣と書いて、遊びと読む。ヘアメイク、デザイン、アート、イベント、AIが仕事です。</h1><div className="play-poster" aria-hidden="true"><div className="play-poster-art" dangerouslySetInnerHTML={{__html:workSvg}}/>{!reduced&&<div className="play-floating"><span>ヘアメイク</span><span>デザイン</span><span>アート</span><span>イベント</span><span>AI</span></div>}</div><a className="play-scroll" href="#idea">SCROLL <span aria-hidden="true">↓</span></a></section>
+  <section className="play-idea play-section" id="idea" aria-labelledby="idea-title"><SectionHead n="01" en="THE IDEA / 表現する自由"/><div className="play-idea-grid"><div className="play-idea-copy"><p className="play-kicker">真剣と書いて、遊びと読む。</p><h2 id="idea-title">いまの自分を、<br/><span>出していい。</span></h2><p>人目を気にせず、現在の自分を表すこと。<br/>表現の仕方に、決まった正解はありません。<br/>僕は、自分にできる方法で、それを続けてきました。</p><Arrow href="about.html">石丸篤史について</Arrow></div><div className="play-idea-visual"><TypeFill word="自由" words="わたし　表現　いまの自分" color="#f46f5c" stripe="#1965e8"/><img src="assets/artist-making.jpg" alt="石丸篤史が作品を制作している様子" loading="lazy"/></div></div></section>
+  <section className="play-work play-section" id="work" aria-labelledby="work-title"><SectionHead n="02" en="WHAT I DO / 表現の手段"/><div className="play-work-title"><div><p className="play-kicker">手段は、ひとつじゃない。</p><h2 id="work-title">つくる。<br/>描く。<br/>集まる。</h2></div><p>ヘアメイクから始まり、デザイン、アート、イベントへ。<br/>表現する対象や方法を変えながら、活動を広げてきました。</p></div><div className="play-work-grid">{practices.map((item,i)=><motion.a key={item.number} href={item.href} className={'play-work-card play-work-card-'+i} whileHover={reduced?undefined:{y:-8}} transition={{duration:.25}}><div className="play-work-card-top"><span>{item.number} / {item.en}</span><span aria-hidden="true">↗</span></div><div className="play-work-card-image"><img src={item.image} alt={item.alt} loading="lazy"/><b aria-hidden="true">{item.name.slice(0,1)}</b></div><div className="play-work-card-bottom"><h3>{item.name}</h3><p>{item.description}</p></div></motion.a>)}</div></section>
+  <section className="play-event play-section" id="event" aria-labelledby="event-title"><SectionHead n="03" en="MAKE A PLACE / 場をつくる"/><div className="play-event-grid"><div className="play-event-visual"><TypeFill word="場" words="アート　イベント　集まる" color="#1965e8" stripe="#35a784"/><img src="assets/portrait-exhibition.jpg" alt="作品が並ぶ100人のアーティスト展の会場にいる石丸篤史" loading="lazy"/></div><div className="play-event-copy"><h2 id="event-title">自分が表現する。<br/>その先に、<br/>人が表現できる場を。</h2><p>「100人のアーティスト展」を主催。出展する人たちも運営に参加し、一緒に場をつくっています。</p><div className="play-event-facts"><div><strong>4</strong><span>開催回数</span></div><div><strong>441</strong><span>累計出展者数</span></div><div><strong>1,530</strong><span>累計来場者数</span></div></div><small>2024年8月〜2026年8月の累計</small><Arrow href="projects.html">100人のアーティスト展を見る</Arrow></div></div></section>
+  <section className="play-ai play-section" id="ai" aria-labelledby="ai-title"><SectionHead n="04" en="AI / これからの手段"/><div className="play-ai-grid"><div className="play-ai-symbol"><TypeFill word="AI" words="効率化　自分の時間　AI" color="#1965e8" stripe="#f46f5c"/></div><div className="play-ai-copy"><p className="play-kicker">AI × HUMAN TIME</p><h2 id="ai-title">仕事を、<br/>もっと身軽に。</h2><p>AIを使った仕事の効率化も応援しています。<br/>人が、自分の時間をもっと自分らしく使えるように。</p><Arrow href="creative.html#ai-lecture">AIの活動について見る</Arrow></div></div></section>
+  <section className="play-ending play-section" aria-labelledby="ending-title"><SectionHead n="05" en="ART FOR BEING"/><TypeFill word="遊び" words="わたし　わたし　わたし" color="#1965e8" stripe="#f46f5c" className="play-ending-fill"/><h2 id="ending-title">生きることを、<br/>表現しよう。</h2><p>企画も、作品も、まだ名前のないアイデアも。<br/>一緒に、かたちにしていきたい。</p><div className="play-ending-links"><Arrow href="about.html">石丸篤史について</Arrow><Arrow href="contact.html">企画・制作の相談について</Arrow></div><footer><span>© ATSUSHI ISHIMARU</span><a href="#main">BACK TO TOP ↑</a></footer></section>
+ </main></MotionConfig>;
 }
