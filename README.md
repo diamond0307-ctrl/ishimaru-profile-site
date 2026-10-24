@@ -35,4 +35,13 @@ HOMEは背景が続く対話構成。対話文は本人提供情報を一人称�
 
 ReactとMotion for Reactで質問の切替、写真のスクロール連動、読了位置を実装。動きを減らす端末設定に対応。本文はビルド時にHTMLへ出力し、JavaScriptがなくても主なプロフィールとリンクを読める。
 
-`npm ci` → `npm run build`。編集元は `src/Home.jsx`、`src/client.jsx`、`dist/flow.css`。詳細ページは従来のHTMLを維持し、`dist/continuity.css`で白背景を統一。`build.mjs`がHOMEのHTMLとブラウザー用バンドルを生成する。
+`npm ci` → `npm run build`。編集元は `src/Home.jsx`、`src/client.jsx`、`dist/flow.css`、`dist/personality.css`。詳細ページは従来のHTMLを維持し、`dist/continuity.css`で調整。全ページの背景・書体は最後に読み込む `dist/atelier.css` で統一。`build.mjs`がHOMEのHTMLとブラウザー用バンドルを生成する。
+
+## 2026-10-24 素材集からの背景選定・Web標準書体
+
+- 参照：CREATIVE_KNOWLEDGEの背景／イラストライブラリ、CORE、DESIGN_EYE、Website Anti-AI。
+- 背景48番（ミント×イエロー×ブルー）：会話から写真まで切れ目なく続く色面。背景12番（ブルーブラシ）：右端に限って紙と絵の具の質感を加える。固定背景のためセクションごとの画像反復・継ぎ目なし。ARTは作品の色が主役になるよう背景濃度を下げる。
+- 原本：`/Users/sekamaru/Desktop/02_BRANDS_AND_ART/CANVA_ASSET_LIBRARY/01_BACKGROUNDS_16X9/48.png`、同フォルダ `12.png`。無変更で `dist/assets/library-background-48.png`、`library-background-12.png` へ複製。トリミング・濃度・合成はCSS表示のみ。
+- イラスト一覧16シートも確認。今回は本人指定のせかまるが案内役を担うため、別キャラクターや装飾イラストは追加しない。
+- 権利：両背景の `rights_status = unknown`。現在の本人限定プレビューへの適用であり、一般公開前に取得元と利用条件の確認が必要。
+- 書体：ヒラギノ角ゴシックを先頭に指定。主要見出し800、本文600を基準。未搭載端末には游ゴシック／Meiryo／sans-serif。フォントファイルは同梱しない。

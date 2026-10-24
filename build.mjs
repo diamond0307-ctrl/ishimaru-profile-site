@@ -17,3 +17,7 @@ for(const name of ['about','projects','art','creative','contact']){
  await writeFile('dist/'+name+'.html',text);
 }
 console.log('Built six pages, pre-rendered HOME and bundled Motion for React.');
+for(const name of ['index','about','projects','art','creative','contact']) {
+ const page=await readFile('dist/'+name+'.html','utf8');
+ if(!page.includes('atelier.css')) await writeFile('dist/'+name+'.html',page.replace('</head>','<link rel="stylesheet" href="atelier.css"></head>'));
+}
