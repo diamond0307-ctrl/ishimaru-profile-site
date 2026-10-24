@@ -45,6 +45,10 @@ body:not(.flow-home) h3 { font-weight: 700; }
 .result-row span { color: #263d40; font-size: clamp(18px, 1.5vw, 25px); font-weight: 800; line-height: 1.35; }
 .next-page > div { max-width: 980px; }
 .next-page .copy { margin-top: 24px; }
+.case-section-why .case-content h2 { position: relative; z-index: 1; }
+.case-section-why .why-photo { width: 78%; aspect-ratio: 1.55; margin: -1.4em -2vw -1.2em auto; overflow: hidden; clip-path: ellipse(49% 45% at 50% 50%); transform: rotate(-5deg); }
+.case-section-why .why-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 66%; }
+.case-section-why .case-content > .copy { position: relative; z-index: 1; }
 .opening h1, .conversation h2, .flow-ending h2, .life-words { font-weight: 800; }
 .opening-lead { font-weight: 600; }
 .question p { background: #f5efda; font-weight: 700; }
@@ -61,6 +65,8 @@ body:has(.art-hero)::after { display: none; }
   .site-nav a { font-weight: 700; }
 }
 @media (max-width: 520px) {
+  .case-section-why .why-photo { width: 100%; margin: 14px 0 0; aspect-ratio: 1.16; }
+  .case-section-why .case-content > .copy { margin-top: 24px; }
   .birth-year { font-size: 30vw; }
   .birth-chapter > * { min-width: 0; }
   .result-row strong { font-size: clamp(72px, 21vw, 108px); }
