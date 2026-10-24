@@ -42,6 +42,9 @@ body:not(.flow-home) h1 { font-weight: 800; line-height: 1.25; }
 body:not(.flow-home) h2 { font-weight: 800; line-height: 1.45; }
 body:not(.flow-home) h3 { font-weight: 700; }
 .birth-year, .result-row strong { font-weight: 800; }
+.result-row span { color: #263d40; font-size: clamp(18px, 1.5vw, 25px); font-weight: 800; line-height: 1.35; }
+.next-page > div { max-width: 980px; }
+.next-page .copy { margin-top: 24px; }
 .opening h1, .conversation h2, .flow-ending h2, .life-words { font-weight: 800; }
 .opening-lead { font-weight: 600; }
 .question p { background: #f5efda; font-weight: 700; }
@@ -61,6 +64,9 @@ body:has(.art-hero)::after { display: none; }
   .birth-year { font-size: 30vw; }
   .birth-chapter > * { min-width: 0; }
   .result-row strong { font-size: clamp(72px, 21vw, 108px); }
+  .result-row:nth-child(3) { gap: 8px; }
+  .result-row:nth-child(3) strong { font-size: clamp(62px, 17vw, 86px); }
+  .result-row span { white-space: nowrap; }
   body::before { background-position: 54% center; }
   body::after { width: 15vw; opacity: .1; }
   .flow-photo img { box-shadow: 6px 8px 0 #263d4017; }
