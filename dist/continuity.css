@@ -5,3 +5,4 @@ body:has(.art-hero){--paper:#d9dfd5}
 html,body,.site-header,.section-soft,.section-dark,.birth-chapter,.art-turn,.results,.making-spread,.about-hero,.site-footer,.art-hero,.art-hero-media,.work-spread.is-primary img,.return-guide{background:var(--paper);color:var(--ink)}
 h1,h2,h3,.brand strong{font-weight:800;letter-spacing:-.045em}
 .return-guide{background:var(--paper)}
+.return-guide .maru{mix-blend-mode:normal}

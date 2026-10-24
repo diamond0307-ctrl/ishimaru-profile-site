@@ -1,20 +1,43 @@
-import React, {useRef, useState, useEffect} from 'react';
-import {motion, MotionConfig, useScroll, useTransform, useReducedMotion, AnimatePresence, useSpring, useMotionValueEvent} from 'motion/react';
+import React, {useRef, useState, useEffect, useId} from 'react';
+import {motion, MotionConfig, useScroll, useTransform, useReducedMotion, AnimatePresence, useMotionValue, useMotionValueEvent} from 'motion/react';
 
 export function Maru({small=false}) {
-  return <svg className={small?'maru small':'maru'} viewBox="480 740 1450 1420" role="img" aria-label="せかまる"><image href="assets/sekamaru-original.png" width="2481" height="3508"/></svg>;
+  const id=useId();
+  return <svg className={small?'maru small':'maru'} viewBox="480 740 1450 1420" role="img" aria-label="せかまる"><defs><clipPath id={id}><ellipse cx="1200" cy="1470" rx="700" ry="640"/><ellipse cx="755" cy="930" rx="145" ry="150"/><ellipse cx="1645" cy="925" rx="145" ry="150"/></clipPath></defs><g clipPath={'url(#'+id+')'}><rect x="480" y="740" width="1450" height="1420" fill="white"/><image href="assets/sekamaru-original.png" width="2481" height="3508"/></g></svg>;
 }
-function Question({children,number}) {return <div className="question"><b aria-hidden="true">{number}</b><p><span>せかまるから、石丸さんへ</span>{children}</p></div>}
+function Question({children,number}) {return <div className="question"><span className="question-home"><Maru/></span><p><span>せかまるから、石丸さんへ / {number}</span>{children}</p></div>}
 const chapters=[['.opening','せかまると、石丸さんの話。'],['.who','石丸さんって、何をしている人？'],['.gathering','その「場」って、どんな場所？'],['.expression','石丸さん自身も、表現しているの？'],['.vision','AIを使うのも、そのため？'],['.ask','もう少し、聞いてもいい？'],['.flow-ending','次は、あなたの話も聞かせて。']];
 function Companion(){
- const rail=useRef(null), starts=useRef([]), current=useRef(0);const [active,setActive]=useState(0),[travel,setTravel]=useState(0);
- const reduced=useReducedMotion();const {scrollY,scrollYProgress}=useScroll();
- const x=useTransform(scrollYProgress,[0,1],[0,travel]);const smoothX=useSpring(x,{stiffness:150,damping:25});
- const bob=useTransform(()=>Math.sin(scrollY.get()/65)*7);const tilt=useTransform(()=>Math.sin(scrollY.get()/130)*9);
- useEffect(()=>{const measure=()=>{setTravel(Math.max(0,rail.current.clientWidth-rail.current.querySelector('button').offsetWidth));starts.current=chapters.map(([selector])=>document.querySelector(selector).getBoundingClientRect().top+window.scrollY);};measure();const ro=new ResizeObserver(measure);ro.observe(document.body);ro.observe(rail.current);window.addEventListener('resize',measure);return()=>{ro.disconnect();window.removeEventListener('resize',measure);};},[]);
- useMotionValueEvent(scrollY,'change',value=>{let next=0;for(let i=0;i<starts.current.length;i++)if(value+window.innerHeight*.4>=starts.current[i])next=i;if(next!==current.current){current.current=next;setActive(next);}});
- const next=()=>document.querySelector(chapters[Math.min(active+1,chapters.length-1)][0]).scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'});
- return <aside className="companion" aria-label="せかまると一緒に読む"><div className="companion-copy"><span>せかまると歩く / {String(active+1).padStart(2,'0')}</span><AnimatePresence mode="wait" initial={false}><motion.p key={active} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:.15}}>{chapters[active][1]}</motion.p></AnimatePresence></div><div ref={rail} className="companion-rail"><div className="walking-line"/><motion.button className="walking-maru" onClick={next} aria-label="次の問いへ進む" style={{x:reduced?0:smoothX,y:reduced?0:bob,rotate:reduced?0:tilt}}><Maru/><span>つづきへ ↓</span></motion.button></div></aside>;
+ const route=useRef([]),obstacles=useRef([]);const [ready,setReady]=useState(false);const reduced=useReducedMotion();const {scrollY}=useScroll();
+ const x=useMotionValue(0),y=useMotionValue(0),scale=useMotionValue(1),rotate=useMotionValue(0);
+ const update=(s)=>{
+  const points=route.current;if(!points.length)return;
+  let i=0;while(i<points.length-2&&s>points[i+1].at)i++;
+  const a=points[i],b=points[i+1];const t=Math.max(0,Math.min(1,(s-a.at)/(b.at-a.at)));const ease=t*t*(3-2*t);
+  let px=a.x+(b.x-a.x)*ease,py=a.y+(b.y-a.y)*ease,sz=a.size+(b.size-a.size)*ease;
+  for(const box of obstacles.current){if(px+sz>box.l&&px<box.r&&py+sz>box.t&&py<box.b){px=window.innerWidth<600?7:20;sz=window.innerWidth<600?48:68;break;}}
+  x.set(px);y.set(py-s);scale.set(sz/110);rotate.set(Math.sin(t*Math.PI)*((b.x>a.x)?8:-8));
+ };
+ useEffect(()=>{
+  if(reduced){document.documentElement.classList.remove('travelling');return;}
+  const measure=()=>{
+   const mobile=window.innerWidth<600,vh=window.innerHeight;const rect=(e)=>{const r=e.getBoundingClientRect();return {l:r.left,r:r.right,t:r.top+window.scrollY,b:r.bottom+window.scrollY,w:r.width,h:r.height};};
+   const points=[];const add=(px,py,size)=>points.push({x:Math.max(6,Math.min(innerWidth-size-6,px)),y:py,size,at:Math.max(0,py-vh*.43)});
+   const first=rect(document.querySelector('.opening-guide'));add(first.l,first.t, mobile?80:125);
+   for(let i=1;i<6;i++){
+    const section=document.querySelector(chapters[i][0]);const q=rect(section.querySelector('.question-home'));add(q.l,q.t,mobile?78:110);
+    const photo=section.querySelector('.flow-photo');
+    if(photo){const r=rect(photo);add(mobile?7:20,q.b+190,mobile?48:68);add(r.r-(mobile?32:45),r.t+r.h*.42,mobile?58:85);}
+    else{const r=rect(section);add(mobile?7:20,q.b+220,mobile?48:68);add(r.r-(mobile?80:145),r.b-90,mobile?62:85);}
+   }
+   const end=rect(document.querySelector('.flow-ending>.maru'));add(end.l,end.t,mobile?110:150);points.sort((a,b)=>a.at-b.at);for(let i=1;i<points.length;i++)points[i].at=Math.max(points[i].at,points[i-1].at+1);route.current=points;
+   obstacles.current=[...document.querySelectorAll('.flow-main h1,.flow-main h2,.flow-main h3,.flow-main p,.flow-main .flow-link,.ask-options,.answer-panel,.ending-links')].filter(e=>!e.closest('.question')).map(rect);
+   document.documentElement.classList.add('travelling');setReady(true);update(window.scrollY);
+  };
+  measure();const ro=new ResizeObserver(measure);ro.observe(document.querySelector('.flow-main'));window.addEventListener('resize',measure);document.fonts.ready.then(measure);return()=>{ro.disconnect();window.removeEventListener('resize',measure);document.documentElement.classList.remove('travelling');};
+ },[reduced]);
+ useMotionValueEvent(scrollY,'change',update);
+ return !reduced&&ready?<motion.div className="travelling-sekamaru" aria-hidden="true" style={{x,y,scale,rotate}}><Maru/></motion.div>:null;
 }
 function Photo({src,alt,className='',caption}) {
  const ref=useRef(null); const reduced=useReducedMotion();
