@@ -1,15 +1,26 @@
-import React, {useRef, useState} from 'react';
-import {motion, MotionConfig, useScroll, useTransform, useReducedMotion, AnimatePresence} from 'motion/react';
+import React, {useRef, useState, useEffect} from 'react';
+import {motion, MotionConfig, useScroll, useTransform, useReducedMotion, AnimatePresence, useSpring, useMotionValueEvent} from 'motion/react';
 
 export function Maru({small=false}) {
-  return <svg className={small?'maru small':'maru'} viewBox="0 0 100 100" fill="none" aria-hidden="true"><path d="M84 46C91 70 69 91 45 86C17 84 8 62 15 38C20 15 45 9 67 18C79 23 83 33 84 46Z" fill="white" stroke="currentColor" strokeWidth="2"/><path d="M36 44v7m24-7v7M38 64q11 9 22-2M21 78l-7 12m58-10 7 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/></svg>;
+  return <svg className={small?'maru small':'maru'} viewBox="480 740 1450 1420" role="img" aria-label="せかまる"><image href="assets/sekamaru-original.png" width="2481" height="3508"/></svg>;
 }
-function Question({children,number}) {return <div className="question"><Maru small/><p><span>小さな問い {number}</span>{children}</p></div>}
+function Question({children,number}) {return <div className="question"><b aria-hidden="true">{number}</b><p><span>せかまるから、石丸さんへ</span>{children}</p></div>}
+const chapters=[['.opening','せかまると、石丸さんの話。'],['.who','石丸さんって、何をしている人？'],['.gathering','その「場」って、どんな場所？'],['.expression','石丸さん自身も、表現しているの？'],['.vision','AIを使うのも、そのため？'],['.ask','もう少し、聞いてもいい？'],['.flow-ending','次は、あなたの話も聞かせて。']];
+function Companion(){
+ const rail=useRef(null), starts=useRef([]), current=useRef(0);const [active,setActive]=useState(0),[travel,setTravel]=useState(0);
+ const reduced=useReducedMotion();const {scrollY,scrollYProgress}=useScroll();
+ const x=useTransform(scrollYProgress,[0,1],[0,travel]);const smoothX=useSpring(x,{stiffness:150,damping:25});
+ const bob=useTransform(()=>Math.sin(scrollY.get()/65)*7);const tilt=useTransform(()=>Math.sin(scrollY.get()/130)*9);
+ useEffect(()=>{const measure=()=>{setTravel(Math.max(0,rail.current.clientWidth-rail.current.querySelector('button').offsetWidth));starts.current=chapters.map(([selector])=>document.querySelector(selector).getBoundingClientRect().top+window.scrollY);};measure();const ro=new ResizeObserver(measure);ro.observe(document.body);ro.observe(rail.current);window.addEventListener('resize',measure);return()=>{ro.disconnect();window.removeEventListener('resize',measure);};},[]);
+ useMotionValueEvent(scrollY,'change',value=>{let next=0;for(let i=0;i<starts.current.length;i++)if(value+window.innerHeight*.4>=starts.current[i])next=i;if(next!==current.current){current.current=next;setActive(next);}});
+ const next=()=>document.querySelector(chapters[Math.min(active+1,chapters.length-1)][0]).scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'});
+ return <aside className="companion" aria-label="せかまると一緒に読む"><div className="companion-copy"><span>せかまると歩く / {String(active+1).padStart(2,'0')}</span><AnimatePresence mode="wait" initial={false}><motion.p key={active} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:.15}}>{chapters[active][1]}</motion.p></AnimatePresence></div><div ref={rail} className="companion-rail"><div className="walking-line"/><motion.button className="walking-maru" onClick={next} aria-label="次の問いへ進む" style={{x:reduced?0:smoothX,y:reduced?0:bob,rotate:reduced?0:tilt}}><Maru/><span>つづきへ ↓</span></motion.button></div></aside>;
+}
 function Photo({src,alt,className='',caption}) {
  const ref=useRef(null); const reduced=useReducedMotion();
  const {scrollYProgress}=useScroll({target:ref,offset:['start end','end start']});
- const y=useTransform(scrollYProgress,[0,1],[45,-45]);
- return <figure ref={ref} className={'flow-photo '+className}><motion.div style={{y:reduced?0:y}}><img src={'assets/'+src} alt={alt} loading="lazy"/></motion.div>{caption&&<figcaption>{caption}</figcaption>}</figure>;
+ const y=useTransform(scrollYProgress,[0,1],[85,-85]);const rotation=useTransform(scrollYProgress,[0,.5,1],[-4,0,3]);const scale=useTransform(scrollYProgress,[0,.4,1],[.9,1,1]);
+ return <figure ref={ref} className={'flow-photo '+className}><motion.div style={{y:reduced?0:y,rotate:reduced?0:rotation,scale:reduced?1:scale}}><img src={'assets/'+src} alt={alt} loading="lazy"/></motion.div>{caption&&<figcaption>{caption}</figcaption>}</figure>;
 }
 const answers=[
  {q:'どんなことを頼めますか？',title:'人が集まる場を、企画から。',text:'イベント企画・プロデュースを軸に、企業とのコラボレーション、ロゴやWeb・LPの制作、AI講座を行っています。何を実現したいか、そこから一緒に考えます。',href:'contact.html',link:'相談できることを見る'},
@@ -22,6 +33,7 @@ export function Home(){
  return <MotionConfig reducedMotion="user"><a className="skip-link" href="#main">本文へ移動</a>
  <header className="flow-header"><a href="index.html" className="flow-brand">石丸篤史<span>Art for Being</span></a><nav aria-label="メインナビゲーション"><a href="about.html">人物を知る</a><a href="projects.html">場をつくる</a><a href="art.html">アート</a><a href="contact.html">相談する ↗</a></nav></header>
  <motion.div className="reading-progress" style={{scaleX:scrollYProgress}} aria-hidden="true"/>
+ <Companion/>
  <main id="main" className="flow-main">
  <div className="life-thread" aria-hidden="true"/>
  <section className="opening" aria-labelledby="opening-title"><div className="opening-copy"><p className="eyebrow">石丸篤史 — 企画する人。表現する人。</p><h1 id="opening-title"><span>ありのままに</span><span>生きることが</span><span><em>アート</em>になる。</span></h1><p className="opening-lead">好きなことをし、表現し、リアルに体験する。<br/>そんな生き方ができる場を、つくっています。</p><a className="flow-link" href="#who">僕の話を、少し。<span>↓</span></a></div><figure className="opening-portrait"><img src="assets/portrait-main.jpg" width="1160" height="1800" alt="石丸篤史のポートレート" fetchPriority="high"/><figcaption>ISHIMARU ATSUSHI<br/>Art for Being 代表 / 世界のまる</figcaption></figure><motion.a href="#who" className="opening-guide" style={{rotate:reduced?0:rotate}} aria-label="石丸篤史の自己紹介へ"><Maru/><span>ねえ、石丸さん。</span></motion.a></section>
