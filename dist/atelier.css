@@ -49,6 +49,10 @@ body:not(.flow-home) h3 { font-weight: 700; }
 .case-section-why .why-photo { width: 78%; aspect-ratio: 1.55; margin: -1.4em -2vw -1.2em auto; overflow: hidden; clip-path: ellipse(49% 45% at 50% 50%); transform: rotate(-5deg); }
 .case-section-why .why-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 66%; }
 .case-section-why .case-content > .copy { position: relative; z-index: 1; }
+.artwork-caption { align-items: baseline; letter-spacing: 0; }
+.artwork-caption strong { color: #263d40; font-size: clamp(22px, 2.6vw, 38px); font-weight: 800; line-height: 1.3; }
+.artwork-caption span { font-size: clamp(13px, 1.1vw, 16px); font-weight: 700; }
+.artwork-statement { margin: 38px 0 0; font-size: clamp(16px, 1.5vw, 21px); font-weight: 700; line-height: 2.05; }
 .opening h1, .conversation h2, .flow-ending h2, .life-words { font-weight: 800; }
 .opening-lead { font-weight: 600; }
 .question p { background: #f5efda; font-weight: 700; }
