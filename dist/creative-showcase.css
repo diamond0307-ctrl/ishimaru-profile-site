@@ -1,0 +1,74 @@
+.creative-showcase,
+.web-showcase { overflow: hidden; }
+.showcase-intro,
+.web-showcase-intro { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(260px, .6fr); column-gap: clamp(40px, 7vw, 110px); align-items: end; }
+.showcase-intro .kicker,
+.web-showcase-intro .kicker { grid-column: 1 / -1; margin-bottom: 20px; }
+.showcase-intro .copy,
+.web-showcase-intro .copy { margin: 0 0 .45em; }
+.graphic-gallery,
+.web-gallery { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(20px, 3vw, 46px); }
+.graphic-gallery { margin-top: clamp(64px, 8vw, 120px); row-gap: clamp(80px, 10vw, 145px); }
+.graphic-piece,
+.web-sample { min-width: 0; margin: 0; }
+.graphic-piece-hakata { grid-column: 1 / 9; }
+.graphic-piece-api { grid-column: 9 / 13; transform: translateY(75px); }
+.graphic-piece-sauna { grid-column: 1 / 6; }
+.graphic-piece-himawari { grid-column: 6 / 13; transform: translateY(58px); }
+.graphic-piece-uniqlo { grid-column: 1 / 7; }
+.graphic-piece-ishigaki { grid-column: 7 / 13; transform: translateY(95px); }
+.graphic-art { display: flex; align-items: center; justify-content: center; height: clamp(300px, 34vw, 510px); padding: clamp(20px, 3vw, 48px); overflow: hidden; background: #f5eedc; clip-path: polygon(0 0, 100% 0, 100% 87%, 88% 100%, 0 100%); }
+.graphic-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.graphic-piece-hakata .graphic-art { background: #182a2b; }
+.graphic-piece-api .graphic-art { background: #fff8eb; border-radius: 48% 48% 8% 8% / 35% 35% 8% 8%; clip-path: none; }
+.graphic-piece-api .graphic-art img { mix-blend-mode: multiply; }
+.graphic-piece-sauna .graphic-art { background: #262729; clip-path: polygon(0 0, 93% 0, 100% 15%, 100% 100%, 0 100%); }
+.graphic-piece-himawari .graphic-art { background: #f4e64b; clip-path: ellipse(50% 48% at 50% 50%); }
+.graphic-piece-himawari .graphic-art img { width: 118%; max-width: none; height: 118%; }
+.graphic-piece-uniqlo .graphic-art { background: #f3f0e8; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%, 0 17%); }
+.graphic-piece-ishigaki .graphic-art { background: #dcaf39; border-radius: 50% 50% 10% 10%; clip-path: none; }
+.graphic-piece figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding-top: 16px; border-top: 1px solid var(--ink); margin-top: 16px; font-size: clamp(18px, 1.75vw, 26px); font-weight: 800; line-height: 1.35; }
+.graphic-piece figcaption span { flex: none; font-size: clamp(13px, 1vw, 16px); font-weight: 700; color: var(--muted); }
+.web-showcase { padding-top: clamp(110px, 12vw, 180px); }
+.web-gallery { margin-top: clamp(60px, 8vw, 110px); row-gap: clamp(75px, 8vw, 120px); }
+.web-sample:nth-child(1) { grid-column: 1 / 8; }
+.web-sample:nth-child(2) { grid-column: 9 / 13; transform: translateY(90px); }
+.web-sample:nth-child(3) { grid-column: 1 / 6; }
+.web-sample:nth-child(4) { grid-column: 7 / 13; transform: translateY(80px); }
+.web-sample:nth-child(5) { grid-column: 1 / 8; }
+.web-sample:nth-child(6) { grid-column: 9 / 13; transform: translateY(85px); }
+.web-preview { aspect-ratio: 1.52; overflow: hidden; padding: 9px; background: #f5eedc; box-shadow: 13px 15px 0 #263d4018; clip-path: polygon(0 0, 100% 0, 100% 88%, 89% 100%, 0 100%); }
+.web-sample:nth-child(even) .web-preview { clip-path: polygon(0 0, 100% 0, 100% 100%, 11% 100%, 0 87%); }
+.web-preview img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.web-sample figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-top: 24px; line-height: 1.5; }
+.web-sample figcaption strong { font-size: clamp(22px, 2vw, 31px); font-weight: 800; }
+.web-sample figcaption span { color: var(--muted); font-size: clamp(14px, 1vw, 17px); font-weight: 700; text-align: right; }
+.creative-learning { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, .52fr); gap: 24px 60px; align-items: end; margin-top: clamp(140px, 16vw, 240px); padding-top: 34px; border-top: 2px solid var(--ink); }
+.creative-learning .kicker { grid-column: 1 / -1; margin: 0; }
+.creative-learning h3 { margin: 0; font-size: clamp(38px, 5.5vw, 76px); font-weight: 800; line-height: 1.22; letter-spacing: -.045em; }
+.creative-learning p:last-child { margin: 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.9; }
+.creative-rights { margin-top: 50px; }
+@media (max-width: 850px) {
+  .showcase-intro, .web-showcase-intro { grid-template-columns: 1fr; row-gap: 20px; }
+  .showcase-intro .kicker, .web-showcase-intro .kicker { margin-bottom: 0; }
+  .showcase-intro .copy, .web-showcase-intro .copy { max-width: 35em; }
+  .graphic-gallery { row-gap: 70px; }
+  .graphic-piece-api, .graphic-piece-himawari, .graphic-piece-ishigaki,
+  .web-sample:nth-child(even) { transform: none; }
+  .creative-learning { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .web-showcase-intro .display-title { font-size: clamp(34px, 10.6vw, 42px); }
+  .graphic-gallery, .web-gallery { display: block; margin-top: 54px; }
+  .graphic-piece, .web-sample { margin-bottom: 58px; }
+  .graphic-piece:last-child, .web-sample:last-child { margin-bottom: 0; }
+  .graphic-art { height: clamp(260px, 86vw, 370px); padding: 20px; }
+  .graphic-piece-hakata .graphic-art { height: 235px; }
+  .graphic-piece-uniqlo .graphic-art { height: 380px; }
+  .graphic-piece figcaption, .web-sample figcaption { display: block; }
+  .graphic-piece figcaption span, .web-sample figcaption span { display: block; margin-top: 5px; text-align: left; }
+  .web-showcase { padding-top: 95px; }
+  .web-preview { padding: 6px; box-shadow: 7px 8px 0 #263d4018; }
+  .web-sample:nth-child(even) { transform: none; }
+  .creative-learning { margin-top: 105px; }
+}

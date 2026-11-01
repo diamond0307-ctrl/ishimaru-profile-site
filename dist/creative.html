@@ -10,7 +10,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="site.js" defer></script>
-<link rel="stylesheet" href="continuity.css"><script type="module" src="flow.js"></script><link rel="stylesheet" href="atelier.css"></head>
+<link rel="stylesheet" href="continuity.css"><script type="module" src="flow.js"></script><link rel="stylesheet" href="atelier.css"><link rel="stylesheet" href="creative-showcase.css"></head>
 <body>
   <a class="skip-link" href="#main">本文へ移動</a>
   <header class="site-header">
@@ -56,21 +56,37 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section creative-showcase" id="creative-works" aria-labelledby="creative-works-title">
       <div class="shell">
-        <div class="reveal">
-          <p class="kicker">Web / Design / Learning</p>
-          <h2 class="display-title">つくってきた<br>接点。</h2>
+        <div class="showcase-intro reveal">
+          <p class="kicker">Graphic / Apparel</p>
+          <h2 class="display-title" id="creative-works-title">手で、目で、<br>伝わる形に。</h2>
+          <p class="copy">ロゴ、グラフィック、Tシャツ。目的に合わせて、表現を変える。</p>
         </div>
-        <div class="work-ledger" aria-label="主なクリエイティブ実績">
-          <article class="ledger-row reveal"><h3>Brand / Logo</h3><p>企業ロゴ、ブランドロゴの制作。</p></article>
-          <article class="ledger-row reveal"><h3>Apparel</h3><p>アパレルデザイン。UNIQLO × 博多織のコラボ限定Tシャツを含む。</p></article>
-          <article class="ledger-row reveal"><h3>STAR BOWL</h3><p>アサイーボウル専門店のLP。</p></article>
-          <article class="ledger-row reveal"><h3>Life with Art</h3><p>人の人生をLP・Webサイトとして表現する作品。</p></article>
-          <article class="ledger-row reveal"><h3>Business LP</h3><p>エステサロン、インテリア、ダンススタジオのLP。</p></article>
-          <article class="ledger-row reveal" id="ai-lecture"><h3>AI Lecture</h3><p>AI講座の開催。AI活用だけでなく、人間のリアルな体験へつなげる視点を扱う。</p></article>
+        <div class="graphic-gallery" aria-label="グラフィックとアパレルの制作例">
+          <figure class="graphic-piece graphic-piece-hakata reveal"><div class="graphic-art"><img src="assets/creative/hakata-ori.webp" alt="HAKATA-ORIの文字と色彩を組み合わせたグラフィック" width="1800" height="566" loading="lazy"></div><figcaption>HAKATA-ORI <span>グラフィック</span></figcaption></figure>
+          <figure class="graphic-piece graphic-piece-api reveal"><div class="graphic-art"><img src="assets/creative/api-api.webp" alt="api apiのロゴデザイン" width="1080" height="1080" loading="lazy"></div><figcaption>api api <span>ロゴ</span></figcaption></figure>
+          <figure class="graphic-piece graphic-piece-sauna reveal"><div class="graphic-art"><img src="assets/creative/private-sauna.webp" alt="金色の円を使った個室サウナのビジュアル" width="1400" height="1400" loading="lazy"></div><figcaption>個室サウナ <span>ビジュアル</span></figcaption></figure>
+          <figure class="graphic-piece graphic-piece-himawari reveal"><div class="graphic-art"><img src="assets/creative/himawari.webp" alt="ひまわりの写真とHIMAWARIの文字を組み合わせたデザイン" width="1400" height="1400" loading="lazy"></div><figcaption>HIMAWARI <span>ロゴ・ビジュアル</span></figcaption></figure>
+          <figure class="graphic-piece graphic-piece-uniqlo reveal"><div class="graphic-art"><img src="assets/creative/uniqlo-hakataori.webp" alt="UNIQLOと博多織のコラボ限定Tシャツのデザイン" width="1087" height="1400" loading="lazy"></div><figcaption>UNIQLO × 博多織 <span>Tシャツ</span></figcaption></figure>
+          <figure class="graphic-piece graphic-piece-ishigaki reveal"><div class="graphic-art"><img src="assets/creative/ishigaki-surprise.webp" alt="黄土色の背景にISHIGAKI SURPRISEと記したグラフィック" width="868" height="868" loading="lazy"></div><figcaption>ISHIGAKI SURPRISE <span>グラフィック</span></figcaption></figure>
         </div>
-        <p class="rights-note" style="margin-top:34px">個別案件の制作物画像、担当範囲、クライアント公開許可は未確認のため、確認済み情報のみテキストで掲載しています。</p>
+      </div>
+    </section>
+
+    <section class="section web-showcase" aria-labelledby="web-showcase-title">
+      <div class="shell">
+        <div class="web-showcase-intro reveal"><p class="kicker">Web / LP</p><h2 class="display-title" id="web-showcase-title">画面にも、<br>その人らしさを。</h2><p class="copy">6つの制作例を、実際のページ画面から紹介します。</p></div>
+        <div class="web-gallery" aria-label="WebとLPの制作例">
+          <figure class="web-sample reveal"><div class="web-preview"><img src="assets/creative/web-starbowl.webp" alt="STAR BOWLのLP画面。アサイーボウルの写真とキャッチコピー" width="1400" height="900" loading="lazy"></div><figcaption><strong>STAR BOWL</strong><span>アサイーボウル専門店のLP</span></figcaption></figure>
+          <figure class="web-sample reveal"><div class="web-preview"><img src="assets/creative/web-hiroko.webp" alt="HIROKOのWebページ画面。暗い背景に人生の言葉を配置" width="1400" height="900" loading="lazy"></div><figcaption><strong>HIROKO</strong><span>人生を綴るWeb作品</span></figcaption></figure>
+          <figure class="web-sample reveal"><div class="web-preview"><img src="assets/creative/web-kurukuru.webp" alt="くるくるのLP画面。部屋の写真と色を選ぶデザイン" width="1400" height="900" loading="lazy"></div><figcaption><strong>くるくる</strong><span>インテリアのLP</span></figcaption></figure>
+          <figure class="web-sample reveal"><div class="web-preview"><img src="assets/creative/web-dance.webp" alt="LUCKY JAM DANCEのLP画面。黒い背景に大きなタイポグラフィ" width="1400" height="900" loading="lazy"></div><figcaption><strong>LUCKY★JAM DANCE</strong><span>ダンスチームのLP</span></figcaption></figure>
+          <figure class="web-sample reveal"><div class="web-preview"><img src="assets/creative/web-airi.webp" alt="AIRIの数秘診断ページ画面。ピンク色のデザインと人物写真" width="1400" height="900" loading="lazy"></div><figcaption><strong>AIRI</strong><span>数秘診断Webページ</span></figcaption></figure>
+          <figure class="web-sample reveal"><div class="web-preview"><img src="assets/creative/web-base.webp" alt="BASEのLP画面。トレーニング風景と大きな見出し" width="1400" height="900" loading="lazy"></div><figcaption><strong>BASE</strong><span>パーソナルトレーニングのLP</span></figcaption></figure>
+        </div>
+        <div class="creative-learning reveal" id="ai-lecture"><p class="kicker">AI Lecture</p><h3>AIを使う。<br>人間の時間をつくる。</h3><p>AI講座も開催しています。仕事の効率化を、リアルな体験を楽しむ時間につなげます。</p></div>
+        <p class="rights-note creative-rights">制作例に含まれる第三者の写真・ロゴ・文章は、掲載範囲と二次利用条件を確認してから一般公開します。</p>
       </div>
     </section>
 
